@@ -109,7 +109,8 @@
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   CanUserAddRows="False"
-                  HeadersVisibility="Column">
+                  HeadersVisibility="Column"
+                  CanUserSortColumns="True">
             <DataGrid.InputBindings>
                 <MouseBinding MouseAction="LeftDoubleClick"
                               Command="{Binding EditClientCommand}" />
