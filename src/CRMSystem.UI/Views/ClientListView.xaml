@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -46,8 +47,37 @@
                     Padding="12,5" />
         </StackPanel>
 
-        <DataGrid Grid.Row="2"
-                  ItemsSource="{Binding Clients}"
+        <Grid Grid.Row="2" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Padding="8,6"
+                     FontSize="13">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Resources>
+                            <VisualBrush x:Key="Placeholder" TileMode="None" Stretch="None" AlignmentX="Left">
+                                <VisualBrush.Visual>
+                                    <TextBlock Text="Search by name, company, or email..."
+                                               Foreground="Gray"
+                                               Padding="10,0,0,0" />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter Property="Background" Value="{StaticResource Placeholder}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </Grid>
+
+        <DataGrid Grid.Row="3"
+                  ItemsSource="{Binding ClientsView}"
                   SelectedItem="{Binding SelectedClient}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
@@ -67,7 +97,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <StatusBar Grid.Row="3" Margin="0,10,0,0">
+        <StatusBar Grid.Row="4" Margin="0,10,0,0">
             <StatusBarItem>
                 <TextBlock Text="{Binding StatusMessage}" />
             </StatusBarItem>

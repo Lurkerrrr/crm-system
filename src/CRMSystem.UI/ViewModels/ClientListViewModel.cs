@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.ComponentModel;
+using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CRMSystem.Business.Exceptions;
@@ -19,6 +21,11 @@ public partial class ClientListViewModel : ViewModelBase
     private ObservableCollection<Client> _clients = new();
 
     [ObservableProperty]
+    private string _searchText = string.Empty;
+
+    public ICollectionView ClientsView { get; private set; } = null!;
+
+    [ObservableProperty]
     private Client? _selectedClient;
 
     [ObservableProperty]
@@ -31,6 +38,8 @@ public partial class ClientListViewModel : ViewModelBase
     {
         _clientService = clientService;
         _dialogService = dialogService;
+        ClientsView = CollectionViewSource.GetDefaultView(Clients);
+        ClientsView.Filter = FilterClient;
         _ = LoadClientsAsync();
     }
 
@@ -179,5 +188,37 @@ public partial class ClientListViewModel : ViewModelBase
         {
             IsBusy = false;
         }
+    }
+
+    private bool FilterClient(object obj)
+    {
+        if (obj is not Client client) return false;
+
+        // Text filter
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            var term = SearchText.Trim().ToLowerInvariant();
+            var matches =
+                client.FirstName.ToLowerInvariant().Contains(term) ||
+                client.LastName.ToLowerInvariant().Contains(term) ||
+                (client.Company?.ToLowerInvariant().Contains(term) ?? false) ||
+                client.Email.ToLowerInvariant().Contains(term);
+
+            if (!matches) return false;
+        }
+
+        return true;
+    }
+
+    partial void OnSearchTextChanged(string value)
+    {
+        ClientsView?.Refresh();
+    }
+
+    partial void OnClientsChanged(ObservableCollection<Client> value)
+    {
+        ClientsView = CollectionViewSource.GetDefaultView(value);
+        ClientsView.Filter = FilterClient;
+        OnPropertyChanged(nameof(ClientsView));
     }
 }
