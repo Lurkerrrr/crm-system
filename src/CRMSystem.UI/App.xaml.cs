@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using System.Windows;
-using CRMSystem.UI.ViewModels;
 
 namespace CRMSystem.UI;
 
