@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>CRMSystem.Business</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CRMSystem.Domain\CRMSystem.Domain.csproj" />
+    <ProjectReference Include="..\CRMSystem.Data\CRMSystem.Data.csproj" />
+  </ItemGroup>
+
+</Project>
