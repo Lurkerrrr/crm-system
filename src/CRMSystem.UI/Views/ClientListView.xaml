@@ -51,6 +51,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBox Grid.Column="0"
@@ -102,6 +103,12 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
+
+        <Button Grid.Column="2"
+                    Content="Clear"
+                    Command="{Binding ClearFiltersCommand}"
+                    Padding="12,5"
+                    Margin="10,0,0,0" />
 
         <DataGrid Grid.Row="3"
                   ItemsSource="{Binding ClientsView}"

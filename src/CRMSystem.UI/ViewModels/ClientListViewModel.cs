@@ -45,6 +45,7 @@ public partial class ClientListViewModel : ViewModelBase
     partial void OnSelectedStatusFilterChanged(ClientStatus? value)
     {
         ClientsView?.Refresh();
+        UpdateFilteredCount();
     }
 
     public ClientListViewModel(IClientService clientService, IDialogService dialogService)
@@ -66,6 +67,7 @@ public partial class ClientListViewModel : ViewModelBase
             var data = await _clientService.GetAllAsync();
             Clients = new ObservableCollection<Client>(data);
             StatusMessage = $"Loaded {Clients.Count} client(s).";
+            UpdateFilteredCount();
         }
         catch (Exception ex)
         {
@@ -142,6 +144,13 @@ public partial class ClientListViewModel : ViewModelBase
             StatusMessage = "Client added.";
             await LoadClientsAsync();
         }
+    }
+
+    [RelayCommand]
+    private void ClearFilters()
+    {
+        SearchText = string.Empty;
+        SelectedStatusFilter = null;
     }
 
     [RelayCommand(CanExecute = nameof(CanEditOrDelete))]
@@ -227,10 +236,24 @@ public partial class ClientListViewModel : ViewModelBase
         return true;
     }
 
+    private void UpdateFilteredCount()
+    {
+        if (ClientsView == null) return;
+        var visibleCount = ClientsView.Cast<Client>().Count();
+        var totalCount = Clients.Count;
+
+        if (visibleCount == totalCount)
+            StatusMessage = $"Showing all {totalCount} client(s).";
+        else
+            StatusMessage = $"Showing {visibleCount} of {totalCount} client(s).";
+    }
+
     partial void OnSearchTextChanged(string value)
     {
         ClientsView?.Refresh();
+        UpdateFilteredCount();
     }
+
 
     partial void OnClientsChanged(ObservableCollection<Client> value)
     {
