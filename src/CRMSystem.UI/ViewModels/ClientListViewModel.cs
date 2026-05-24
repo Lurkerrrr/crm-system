@@ -35,14 +35,11 @@ public partial class ClientListViewModel : ViewModelBase
     private bool _isBusy;
 
     [ObservableProperty]
-    private ClientStatus? _selectedStatusFilter;
+    private StatusFilterOption _selectedStatusFilter;
 
-    public IReadOnlyList<ClientStatus?> AvailableStatusFilters { get; } =
-        new ClientStatus?[] { null }
-            .Concat(Enum.GetValues<ClientStatus>().Cast<ClientStatus?>())
-            .ToList();
+    public IReadOnlyList<StatusFilterOption> AvailableStatusFilters { get; }
 
-    partial void OnSelectedStatusFilterChanged(ClientStatus? value)
+    partial void OnSelectedStatusFilterChanged(StatusFilterOption value)
     {
         ClientsView?.Refresh();
         UpdateFilteredCount();
@@ -52,6 +49,18 @@ public partial class ClientListViewModel : ViewModelBase
     {
         _clientService = clientService;
         _dialogService = dialogService;
+
+        // Build the filter options: "All statuses" + one per enum value
+        var options = new List<StatusFilterOption>
+        {
+            new("All statuses", null)
+        };
+        options.AddRange(Enum.GetValues<ClientStatus>()
+            .Select(s => new StatusFilterOption(s.ToString(), s)));
+        AvailableStatusFilters = options;
+
+        _selectedStatusFilter = AvailableStatusFilters[0]; // default to "All statuses"
+
         ClientsView = CollectionViewSource.GetDefaultView(Clients);
         ClientsView.Filter = FilterClient;
         _ = LoadClientsAsync();
@@ -150,7 +159,7 @@ public partial class ClientListViewModel : ViewModelBase
     private void ClearFilters()
     {
         SearchText = string.Empty;
-        SelectedStatusFilter = null;
+        SelectedStatusFilter = AvailableStatusFilters[0];
     }
 
     [RelayCommand(CanExecute = nameof(CanEditOrDelete))]
@@ -171,6 +180,7 @@ public partial class ClientListViewModel : ViewModelBase
     partial void OnSelectedClientChanged(Client? value)
     {
         EditClientCommand.NotifyCanExecuteChanged();
+        DeleteClientCommand.NotifyCanExecuteChanged();
     }
 
     private bool CanRunCommand() => !IsBusy;
@@ -230,7 +240,8 @@ public partial class ClientListViewModel : ViewModelBase
         }
 
         // Status filter
-        if (SelectedStatusFilter.HasValue && client.Status != SelectedStatusFilter.Value)
+        if (SelectedStatusFilter?.Status.HasValue == true
+            && client.Status != SelectedStatusFilter.Status.Value)
             return false;
 
         return true;
@@ -261,4 +272,9 @@ public partial class ClientListViewModel : ViewModelBase
         ClientsView.Filter = FilterClient;
         OnPropertyChanged(nameof(ClientsView));
     }
+}
+
+public record StatusFilterOption(string Label, ClientStatus? Status)
+{
+    public override string ToString() => Label;
 }
