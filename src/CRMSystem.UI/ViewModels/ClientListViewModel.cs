@@ -34,6 +34,19 @@ public partial class ClientListViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isBusy;
 
+    [ObservableProperty]
+    private ClientStatus? _selectedStatusFilter;
+
+    public IReadOnlyList<ClientStatus?> AvailableStatusFilters { get; } =
+        new ClientStatus?[] { null }
+            .Concat(Enum.GetValues<ClientStatus>().Cast<ClientStatus?>())
+            .ToList();
+
+    partial void OnSelectedStatusFilterChanged(ClientStatus? value)
+    {
+        ClientsView?.Refresh();
+    }
+
     public ClientListViewModel(IClientService clientService, IDialogService dialogService)
     {
         _clientService = clientService;
@@ -206,6 +219,10 @@ public partial class ClientListViewModel : ViewModelBase
 
             if (!matches) return false;
         }
+
+        // Status filter
+        if (SelectedStatusFilter.HasValue && client.Status != SelectedStatusFilter.Value)
+            return false;
 
         return true;
     }

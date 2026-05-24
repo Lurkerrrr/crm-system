@@ -50,11 +50,14 @@
         <Grid Grid.Row="2" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+
             <TextBox Grid.Column="0"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                      Padding="8,6"
-                     FontSize="13">
+                     FontSize="13"
+                     Margin="0,0,10,0">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
                         <Style.Resources>
@@ -74,6 +77,30 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
+
+            <ComboBox Grid.Column="1"
+                      ItemsSource="{Binding AvailableStatusFilters}"
+                      SelectedItem="{Binding SelectedStatusFilter}"
+                      MinWidth="160"
+                      Padding="8,4">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                            <Setter Property="Text" Value="All statuses" />
+                                            <Setter Property="FontStyle" Value="Italic" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
 
         <DataGrid Grid.Row="3"
