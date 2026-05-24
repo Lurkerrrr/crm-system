@@ -149,4 +149,35 @@ public partial class ClientListViewModel : ViewModelBase
         LoadClientsCommand.NotifyCanExecuteChanged();
         SeedDataCommand.NotifyCanExecuteChanged();
     }
+
+    [RelayCommand(CanExecute = nameof(CanEditOrDelete))]
+    private async Task DeleteClientAsync()
+    {
+        if (SelectedClient == null) return;
+
+        var confirmed = _dialogService.ConfirmAction(
+            "Delete Client",
+            $"Are you sure you want to delete {SelectedClient.FirstName} {SelectedClient.LastName}?\n\n" +
+            "This will also delete all associated contacts. This action cannot be undone.");
+
+        if (!confirmed) return;
+
+        try
+        {
+            IsBusy = true;
+            StatusMessage = "Deleting...";
+            await _clientService.DeleteAsync(SelectedClient.Id);
+            StatusMessage = "Client deleted.";
+            await LoadClientsAsync();
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Error: {ex.Message}";
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 }

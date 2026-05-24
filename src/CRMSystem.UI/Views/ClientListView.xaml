@@ -31,6 +31,12 @@
                     Command="{Binding EditClientCommand}"
                     Padding="12,5"
                     Margin="0,0,10,0" />
+            <Button Content="Delete"
+                    Command="{Binding DeleteClientCommand}"
+                    Padding="12,5"
+                    Margin="0,0,10,0"
+                    Background="#C62828"
+                    Foreground="White" />
             <Button Content="Seed Sample Data"
                     Command="{Binding SeedDataCommand}"
                     Padding="12,5"
