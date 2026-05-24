@@ -1,13 +1,15 @@
-﻿using System.IO;
-using System.Windows;
-using CRMSystem.Business.Services;
+﻿using CRMSystem.Business.Services;
 using CRMSystem.Data;
 using CRMSystem.Data.Repositories;
+using CRMSystem.UI.ViewModels;
 using CRMSystem.UI.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.IO;
+using System.Windows;
+using CRMSystem.UI.ViewModels;
 
 namespace CRMSystem.UI;
 
@@ -78,6 +80,7 @@ public partial class App : Application
         services.AddScoped<IReportService, ReportService>();
 
         // ---------- UI layer ----------
+        services.AddSingleton<MainViewModel>();
         services.AddSingleton<MainWindow>();
     }
 }

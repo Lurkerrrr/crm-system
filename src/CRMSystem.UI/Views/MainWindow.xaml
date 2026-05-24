@@ -4,16 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CRMSystem.UI.Views"
+        xmlns:vm="clr-namespace:CRMSystem.UI.ViewModels"
         mc:Ignorable="d"
         Title="CRM System"
         Height="600"
         Width="900"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
@@ -23,19 +26,18 @@
                    Margin="0,0,0,15" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
-            <Button x:Name="SeedDataButton"
-                    Content="🌱 Seed Sample Data"
+            <Button Content="🌱 Seed Sample Data"
+                    Command="{Binding SeedDataCommand}"
                     Padding="10,5"
-                    Margin="0,0,10,0"
-                    Click="SeedDataButton_Click" />
-            <Button x:Name="LoadClientsButton"
-                    Content="📋 Load Clients"
-                    Padding="10,5"
-                    Click="LoadClientsButton_Click" />
+                    Margin="0,0,10,0" />
+            <Button Content="📋 Load Clients"
+                    Command="{Binding LoadClientsCommand}"
+                    Padding="10,5" />
         </StackPanel>
 
         <DataGrid Grid.Row="2"
-                  x:Name="ClientsGrid"
+                  ItemsSource="{Binding Clients}"
+                  SelectedItem="{Binding SelectedClient}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
                   CanUserAddRows="False"
@@ -49,5 +51,11 @@
                 <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
             </DataGrid.Columns>
         </DataGrid>
+
+        <StatusBar Grid.Row="3" Margin="0,10,0,0">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}" />
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
