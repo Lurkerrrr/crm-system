@@ -9,21 +9,45 @@
         Height="600"
         Width="900"
         WindowStartupLocation="CenterScreen">
-    <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="CRM System"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,10" />
-            <TextBlock Text="University Project — Rzeszów 2026"
-                       FontSize="14"
-                       Foreground="Gray"
-                       HorizontalAlignment="Center" />
-            <TextBlock Text="🚧 Under construction"
-                       FontSize="16"
-                       HorizontalAlignment="Center"
-                       Margin="0,30,0,0" />
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="CRM System"
+                   FontSize="28"
+                   FontWeight="Bold"
+                   Margin="0,0,0,15" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
+            <Button x:Name="SeedDataButton"
+                    Content="🌱 Seed Sample Data"
+                    Padding="10,5"
+                    Margin="0,0,10,0"
+                    Click="SeedDataButton_Click" />
+            <Button x:Name="LoadClientsButton"
+                    Content="📋 Load Clients"
+                    Padding="10,5"
+                    Click="LoadClientsButton_Click" />
         </StackPanel>
+
+        <DataGrid Grid.Row="2"
+                  x:Name="ClientsGrid"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" />
+                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="120" />
+                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="120" />
+                <DataGridTextColumn Header="Company" Binding="{Binding Company}" Width="180" />
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
