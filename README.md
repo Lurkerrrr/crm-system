@@ -1,126 +1,103 @@
 # CRM System
 
-A lightweight Customer Relationship Management (CRM) desktop application designed for small and medium-sized organizations. Built as a university team project (*Projekt Zespołowy*) at the University of Rzeszów, 2026.
+A lightweight Customer Relationship Management (CRM) desktop application for small and medium-sized organizations.
 
-## 📋 Overview
+## Overview
 
-CRM System enables organizations to manage customer relationships, track interactions, monitor sales pipelines, and generate analytical reports — all through an intuitive desktop interface. Unlike bloated commercial CRMs, this system focuses on the essentials: simplicity, speed, and ease of use.
+CRM System enables organizations to manage customer relationships, track interactions, monitor sales pipelines, and generate analytical reports through a desktop interface. The application focuses on essential CRM functionality without the complexity of large commercial systems.
 
-## ✨ Features
+## Features
 
-- **Client Management** — add, edit, delete, and search client records
-- **Contact History** — log notes, meetings, calls, and other interactions
-- **Status Tracking** — track client lifecycle (New, Active, In Negotiation, Closed)
-- **Search & Filter** — quickly find data across the database
-- **Reporting** — basic analytics (client counts, interaction frequency, etc.)
-- **Data Export** — export to CSV/JSON
-- **User Authentication** — optional login with role-based access
+- Client management (create, read, update, delete)
+- Contact history tracking (notes, meetings, calls, emails)
+- Client lifecycle status (New, Active, In Negotiation, Closed)
+- Search and filtering
+- Basic reporting and analytics
+- Data export (CSV/JSON)
+- Optional user authentication with role-based access
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
 | Language | C# |
 | Runtime | .NET 8 (LTS) |
-| UI Framework | WPF (Windows Presentation Foundation) |
+| UI Framework | WPF |
 | Architecture Pattern | MVVM |
-| ORM | Entity Framework Core |
+| MVVM Library | CommunityToolkit.Mvvm |
+| ORM | Entity Framework Core 8 |
 | Database | SQLite |
 | DI Container | Microsoft.Extensions.DependencyInjection |
-| Testing | xUnit |
+| Configuration | Microsoft.Extensions.Configuration |
+| Testing | xUnit, Moq, FluentAssertions |
 
-## 🏗️ Architecture
+## Architecture
 
-The project follows a **layered architecture** with clear separation of concerns:
+The project follows a layered architecture with strict separation of concerns:
 
 ```
-┌─────────────────────────────────────┐
-│   CRMSystem.UI (WPF + MVVM)         │  ← Presentation Layer
-├─────────────────────────────────────┤
-│   CRMSystem.Business (Services)     │  ← Business Logic Layer
-├─────────────────────────────────────┤
-│   CRMSystem.Data (EF Core, Repos)   │  ← Data Access Layer
-├─────────────────────────────────────┤
-│   CRMSystem.Domain (Entities)       │  ← Domain Layer
-└─────────────────────────────────────┘
+CRMSystem.UI         Presentation layer (WPF + MVVM)
+CRMSystem.Business   Business logic layer (services, validation)
+CRMSystem.Data       Data access layer (EF Core, repositories)
+CRMSystem.Domain     Domain layer (entities, enums)
 ```
 
-### Design Patterns Used
+Dependency direction: UI -> Business -> Data -> Domain. The Domain layer has no dependencies on any other layer.
 
-- **Repository Pattern** — abstracts data access logic
-- **MVVM** — separates UI from business logic
-- **Dependency Injection** — improves testability and modularity
-- **SOLID Principles** — applied throughout
+### Design Patterns
 
-## 📁 Project Structure
+- Repository Pattern
+- MVVM (Model-View-ViewModel)
+- Dependency Injection
+- SOLID Principles
+
+## Project Structure
 
 ```
 crm-system/
 ├── src/
-│   ├── CRMSystem.Domain/        # Entities, enums, domain logic
-│   ├── CRMSystem.Data/          # DbContext, repositories, migrations
-│   ├── CRMSystem.Business/      # Services, validation, business rules
-│   └── CRMSystem.UI/            # WPF application (Views, ViewModels)
+│   ├── CRMSystem.Domain/        Entities, enums
+│   ├── CRMSystem.Data/          DbContext, repositories, migrations
+│   ├── CRMSystem.Business/      Services, validation, business rules
+│   └── CRMSystem.UI/            WPF application (Views, ViewModels)
 ├── tests/
-│   └── CRMSystem.Tests/         # Unit and integration tests
-├── docs/                        # Project documentation
-├── CRMSystem.sln                # Solution file
+│   └── CRMSystem.Tests/         Unit and integration tests
+├── docs/                        Project documentation
+├── CRMSystem.sln                Solution file
 └── README.md
 ```
 
-## 🚀 Getting Started
+## Requirements
 
-### Prerequisites
-
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- .NET 8 SDK
 - Windows OS (required for WPF)
-- Visual Studio 2022 or JetBrains Rider (recommended)
+- Visual Studio 2022 or later, or JetBrains Rider
 
-### Build & Run
+## Build and Run
 
 ```bash
-# Clone the repository
-git clone https://github.com/<your-username>/crm-system.git
+git clone https://github.com/Lurkerrrr/crm-system.git
 cd crm-system
 
-# Restore dependencies
 dotnet restore
-
-# Build the solution
 dotnet build
-
-# Run the WPF application
 dotnet run --project src/CRMSystem.UI
 ```
 
-### Database Setup
+## Database
 
-The application uses SQLite, which requires no separate installation. The database file is created automatically on first run. To apply migrations manually:
+The application uses SQLite. The database file is created automatically on first run via EF Core migrations. To apply migrations manually:
 
 ```bash
-dotnet ef database update --project src/CRMSystem.Data --startup-project src/CRMSystem.UI
+dotnet ef database update --project src/CRMSystem.Data --startup-project src/CRMSystem.Data
 ```
 
-## 🧪 Running Tests
+## Tests
 
 ```bash
 dotnet test
 ```
 
-## 📚 Documentation
+## Documentation
 
-Full project documentation (in Polish) is available in the [`docs/`](./docs) folder.
-
-## 👤 Author
-
-**Viktor Pylypenko** (68166) — Group 6IID-P
-
-**Supervisor:** mgr inż. Aleksander Mysakowec
-
-## 📄 License
-
-This project is licensed under the MIT License — see the [LICENSE](./LICENSE) file for details.
-
----
-
-*University of Rzeszów, 2026*
+Full project documentation is available in the `docs/` folder.
