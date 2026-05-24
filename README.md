@@ -97,7 +97,3 @@ dotnet ef database update --project src/CRMSystem.Data --startup-project src/CRM
 ```bash
 dotnet test
 ```
-
-## Documentation
-
-Full project documentation is available in the `docs/` folder.

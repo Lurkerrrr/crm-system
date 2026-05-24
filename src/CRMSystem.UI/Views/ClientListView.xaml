@@ -21,13 +21,23 @@
                    Margin="0,0,0,15" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
+            <Button Content="Add Client"
+                    Command="{Binding AddClientCommand}"
+                    Padding="12,5"
+                    Margin="0,0,10,0"
+                    Background="#2B313D"
+                    Foreground="White" />
+            <Button Content="Edit"
+                    Command="{Binding EditClientCommand}"
+                    Padding="12,5"
+                    Margin="0,0,10,0" />
             <Button Content="Seed Sample Data"
                     Command="{Binding SeedDataCommand}"
-                    Padding="10,5"
+                    Padding="12,5"
                     Margin="0,0,10,0" />
             <Button Content="Refresh"
                     Command="{Binding LoadClientsCommand}"
-                    Padding="10,5" />
+                    Padding="12,5" />
         </StackPanel>
 
         <DataGrid Grid.Row="2"
@@ -37,6 +47,10 @@
                   IsReadOnly="True"
                   CanUserAddRows="False"
                   HeadersVisibility="Column">
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick"
+                              Command="{Binding EditClientCommand}" />
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" />
                 <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="120" />

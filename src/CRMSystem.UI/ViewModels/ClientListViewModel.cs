@@ -6,12 +6,14 @@ using CRMSystem.Business.Exceptions;
 using CRMSystem.Business.Services;
 using CRMSystem.Domain.Entities;
 using CRMSystem.Domain.Enums;
+using CRMSystem.UI.Services;
 
 namespace CRMSystem.UI.ViewModels;
 
 public partial class ClientListViewModel : ViewModelBase
 {
     private readonly IClientService _clientService;
+    private readonly IDialogService _dialogService;
 
     [ObservableProperty]
     private ObservableCollection<Client> _clients = new();
@@ -25,9 +27,10 @@ public partial class ClientListViewModel : ViewModelBase
     [ObservableProperty]
     private bool _isBusy;
 
-    public ClientListViewModel(IClientService clientService)
+    public ClientListViewModel(IClientService clientService, IDialogService dialogService)
     {
         _clientService = clientService;
+        _dialogService = dialogService;
         _ = LoadClientsAsync();
     }
 
@@ -106,6 +109,37 @@ public partial class ClientListViewModel : ViewModelBase
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task AddClientAsync()
+    {
+        var saved = _dialogService.ShowClientForm(null);
+        if (saved)
+        {
+            StatusMessage = "Client added.";
+            await LoadClientsAsync();
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanEditOrDelete))]
+    private async Task EditClientAsync()
+    {
+        if (SelectedClient == null) return;
+
+        var saved = _dialogService.ShowClientForm(SelectedClient);
+        if (saved)
+        {
+            StatusMessage = "Client updated.";
+            await LoadClientsAsync();
+        }
+    }
+
+    private bool CanEditOrDelete() => SelectedClient != null;
+
+    partial void OnSelectedClientChanged(Client? value)
+    {
+        EditClientCommand.NotifyCanExecuteChanged();
     }
 
     private bool CanRunCommand() => !IsBusy;

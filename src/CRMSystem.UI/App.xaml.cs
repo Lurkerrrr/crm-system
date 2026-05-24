@@ -80,13 +80,15 @@ public partial class App : Application
         services.AddScoped<IReportService, ReportService>();
 
         // ---------- UI layer ----------
-        // Navigation
+        // Navigation & dialogs
         services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<IDialogService, DialogService>();
 
         // ViewModels — Transient so each navigation gets a fresh instance
         services.AddTransient<DashboardViewModel>();
         services.AddTransient<ClientListViewModel>();
         services.AddTransient<ReportsViewModel>();
+        services.AddTransient<ClientFormViewModel>();
         services.AddSingleton<MainViewModel>();
 
         // Main window
