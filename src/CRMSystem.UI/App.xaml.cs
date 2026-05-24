@@ -1,6 +1,7 @@
 ﻿using CRMSystem.Business.Services;
 using CRMSystem.Data;
 using CRMSystem.Data.Repositories;
+using CRMSystem.UI.Services;
 using CRMSystem.UI.ViewModels;
 using CRMSystem.UI.Views;
 using Microsoft.EntityFrameworkCore;
@@ -79,7 +80,16 @@ public partial class App : Application
         services.AddScoped<IReportService, ReportService>();
 
         // ---------- UI layer ----------
+        // Navigation
+        services.AddSingleton<INavigationService, NavigationService>();
+
+        // ViewModels — Transient so each navigation gets a fresh instance
+        services.AddTransient<DashboardViewModel>();
+        services.AddTransient<ClientListViewModel>();
+        services.AddTransient<ReportsViewModel>();
         services.AddSingleton<MainViewModel>();
+
+        // Main window
         services.AddSingleton<MainWindow>();
     }
 }

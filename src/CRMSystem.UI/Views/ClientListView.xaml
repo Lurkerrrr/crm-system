@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="CRMSystem.UI.Views.ClientListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:CRMSystem.UI.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:ClientListViewModel}">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="Clients"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,15" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
+            <Button Content="Seed Sample Data"
+                    Command="{Binding SeedDataCommand}"
+                    Padding="10,5"
+                    Margin="0,0,10,0" />
+            <Button Content="Refresh"
+                    Command="{Binding LoadClientsCommand}"
+                    Padding="10,5" />
+        </StackPanel>
+
+        <DataGrid Grid.Row="2"
+                  ItemsSource="{Binding Clients}"
+                  SelectedItem="{Binding SelectedClient}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" />
+                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="120" />
+                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="120" />
+                <DataGridTextColumn Header="Company" Binding="{Binding Company}" Width="180" />
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200" />
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StatusBar Grid.Row="3" Margin="0,10,0,0">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}" />
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</UserControl>

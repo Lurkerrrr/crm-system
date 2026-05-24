@@ -3,59 +3,83 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CRMSystem.UI.Views"
         xmlns:vm="clr-namespace:CRMSystem.UI.ViewModels"
+        xmlns:views="clr-namespace:CRMSystem.UI.Views"
         mc:Ignorable="d"
         Title="CRM System"
-        Height="600"
-        Width="900"
+        Height="700"
+        Width="1100"
         WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel}">
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Text="CRM System"
-                   FontSize="28"
-                   FontWeight="Bold"
-                   Margin="0,0,0,15" />
+    <Window.Resources>
+        <!-- DataTemplates map each ViewModel type to its View -->
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ClientListViewModel}">
+            <views:ClientListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ReportsViewModel}">
+            <views:ReportsView />
+        </DataTemplate>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
-            <Button Content="🌱 Seed Sample Data"
-                    Command="{Binding SeedDataCommand}"
-                    Padding="10,5"
-                    Margin="0,0,10,0" />
-            <Button Content="📋 Load Clients"
-                    Command="{Binding LoadClientsCommand}"
-                    Padding="10,5" />
-        </StackPanel>
+        <!-- Sidebar button style -->
+        <Style x:Key="NavButton" TargetType="Button">
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Margin" Value="10,4" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Padding" Value="15,0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3A4252" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 
-        <DataGrid Grid.Row="2"
-                  ItemsSource="{Binding Clients}"
-                  SelectedItem="{Binding SelectedClient}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  CanUserAddRows="False"
-                  HeadersVisibility="Column">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" />
-                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="120" />
-                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="120" />
-                <DataGridTextColumn Header="Company" Binding="{Binding Company}" Width="180" />
-                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200" />
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
-            </DataGrid.Columns>
-        </DataGrid>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <StatusBar Grid.Row="3" Margin="0,10,0,0">
-            <StatusBarItem>
-                <TextBlock Text="{Binding StatusMessage}" />
-            </StatusBarItem>
-        </StatusBar>
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="#2B313D">
+            <DockPanel>
+                <Border DockPanel.Dock="Top" Padding="20,25,20,20">
+                    <StackPanel>
+                        <TextBlock Text="CRM System"
+                                   Foreground="White"
+                                   FontSize="20"
+                                   FontWeight="Bold" />
+                        <TextBlock Text="v1.0"
+                                   Foreground="#8A92A5"
+                                   FontSize="11"
+                                   Margin="0,4,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <StackPanel>
+                    <Button Content="Dashboard"
+                            Style="{StaticResource NavButton}"
+                            Command="{Binding GoToDashboardCommand}" />
+                    <Button Content="Clients"
+                            Style="{StaticResource NavButton}"
+                            Command="{Binding GoToClientsCommand}" />
+                    <Button Content="Reports"
+                            Style="{StaticResource NavButton}"
+                            Command="{Binding GoToReportsCommand}" />
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Content area -->
+        <ContentControl Grid.Column="1" Content="{Binding CurrentViewModel}" />
     </Grid>
 </Window>
