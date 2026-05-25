@@ -11,6 +11,7 @@ namespace CRMSystem.UI.ViewModels;
 public partial class ClientDetailsViewModel : ViewModelBase, INavigationAware
 {
     private readonly IClientService _clientService;
+    private readonly IContactService _contactService;
     private readonly INavigationService _navigationService;
     private readonly IDialogService _dialogService;
 
@@ -31,10 +32,12 @@ public partial class ClientDetailsViewModel : ViewModelBase, INavigationAware
 
     public ClientDetailsViewModel(
         IClientService clientService,
+        IContactService contactService,
         INavigationService navigationService,
         IDialogService dialogService)
     {
         _clientService = clientService;
+        _contactService = contactService;
         _navigationService = navigationService;
         _dialogService = dialogService;
     }
@@ -95,5 +98,70 @@ public partial class ClientDetailsViewModel : ViewModelBase, INavigationAware
             StatusMessage = "Client updated.";
             await LoadAsync(Client.Id);
         }
+    }
+
+    [RelayCommand]
+    private async Task AddContactAsync()
+    {
+        if (Client == null) return;
+
+        var saved = _dialogService.ShowContactForm(Client.Id, null);
+        if (saved)
+        {
+            StatusMessage = "Contact added.";
+            await LoadAsync(Client.Id);
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanEditOrDeleteContact))]
+    private async Task EditContactAsync()
+    {
+        if (Client == null || SelectedContact == null) return;
+
+        var saved = _dialogService.ShowContactForm(Client.Id, SelectedContact);
+        if (saved)
+        {
+            StatusMessage = "Contact updated.";
+            await LoadAsync(Client.Id);
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanEditOrDeleteContact))]
+    private async Task DeleteContactAsync()
+    {
+        if (SelectedContact == null || Client == null) return;
+
+        var confirmed = _dialogService.ConfirmAction(
+            "Delete Contact",
+            $"Are you sure you want to delete this {SelectedContact.Type} from {SelectedContact.Date:yyyy-MM-dd}?\n\n" +
+            "This action cannot be undone.");
+
+        if (!confirmed) return;
+
+        try
+        {
+            IsBusy = true;
+            StatusMessage = "Deleting...";
+            await _contactService.DeleteAsync(SelectedContact.Id);
+            StatusMessage = "Contact deleted.";
+            await LoadAsync(Client.Id);
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Error: {ex.Message}";
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private bool CanEditOrDeleteContact() => SelectedContact != null;
+
+    partial void OnSelectedContactChanged(Contact? value)
+    {
+        EditContactCommand.NotifyCanExecuteChanged();
+        DeleteContactCommand.NotifyCanExecuteChanged();
     }
 }

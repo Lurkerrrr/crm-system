@@ -39,4 +39,17 @@ public class DialogService : IDialogService
 
         return result == MessageBoxResult.Yes;
     }
+
+    public bool ShowContactForm(int clientId, Contact? contact)
+    {
+        var viewModel = _serviceProvider.GetRequiredService<ContactFormViewModel>();
+        viewModel.Load(clientId, contact);
+
+        var view = new ContactFormView(viewModel)
+        {
+            Owner = Application.Current.MainWindow
+        };
+
+        return view.ShowDialog() == true;
+    }
 }

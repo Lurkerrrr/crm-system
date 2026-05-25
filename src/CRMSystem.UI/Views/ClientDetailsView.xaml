@@ -95,11 +95,53 @@
             <!-- Contact History Tab -->
             <TabItem Header="Contact History">
                 <Grid Margin="10">
-                    <TextBlock Text="Contact history coming next..."
-                               Foreground="Gray"
-                               FontStyle="Italic"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button Content="Add Contact"
+                                Command="{Binding AddContactCommand}"
+                                Padding="12,5"
+                                Margin="0,0,10,0"
+                                Background="#2B313D"
+                                Foreground="White" />
+                        <Button Content="Edit"
+                                Command="{Binding EditContactCommand}"
+                                Padding="12,5"
+                                Margin="0,0,10,0" />
+                        <Button Content="Delete"
+                                Command="{Binding DeleteContactCommand}"
+                                Padding="12,5"
+                                Background="#C62828"
+                                Foreground="White" />
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1"
+                              ItemsSource="{Binding Contacts}"
+                              SelectedItem="{Binding SelectedContact}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              HeadersVisibility="Column"
+                              CanUserSortColumns="True">
+                        <DataGrid.InputBindings>
+                            <MouseBinding MouseAction="LeftDoubleClick"
+                                          Command="{Binding EditContactCommand}" />
+                        </DataGrid.InputBindings>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Date"
+                                                Binding="{Binding Date, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}"
+                                                Width="140" />
+                            <DataGridTextColumn Header="Type"
+                                                Binding="{Binding Type}"
+                                                Width="100" />
+                            <DataGridTextColumn Header="Description"
+                                                Binding="{Binding Description}"
+                                                Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>
