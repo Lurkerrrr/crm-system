@@ -118,6 +118,25 @@
                                 Foreground="White" />
                     </StackPanel>
 
+                    <TextBlock Grid.Row="1"
+                               Text="No contacts yet. Click 'Add Contact' to record the first interaction."
+                               Foreground="Gray"
+                               FontStyle="Italic"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Panel.ZIndex="10">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Contacts.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
                     <DataGrid Grid.Row="1"
                               ItemsSource="{Binding Contacts}"
                               SelectedItem="{Binding SelectedContact}"
