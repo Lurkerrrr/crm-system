@@ -23,6 +23,9 @@
         <DataTemplate DataType="{x:Type vm:ReportsViewModel}">
             <views:ReportsView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ClientDetailsViewModel}">
+            <views:ClientDetailsView />
+        </DataTemplate>
 
         <!-- Sidebar button style -->
         <Style x:Key="NavButton" TargetType="Button">

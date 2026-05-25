@@ -91,6 +91,7 @@ public partial class App : Application
         services.AddTransient<ClientFormViewModel>();
         services.AddSingleton<MainViewModel>();
         services.AddTransient<ContactFormViewModel>();
+        services.AddTransient<ClientDetailsViewModel>();
 
         // Main window
         services.AddSingleton<MainWindow>();

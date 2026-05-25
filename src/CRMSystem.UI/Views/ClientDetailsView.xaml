@@ -1,0 +1,113 @@
+﻿<UserControl x:Class="CRMSystem.UI.Views.ClientDetailsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:CRMSystem.UI.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:ClientDetailsViewModel}">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header with back button + client name -->
+        <Grid Grid.Row="0" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Content="← Back"
+                    Command="{Binding GoBackCommand}"
+                    Padding="12,5"
+                    Margin="0,0,15,0" />
+
+            <TextBlock Grid.Column="1"
+                       Text="{Binding Client.FullName, FallbackValue='Client Details'}"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center" />
+
+            <Button Grid.Column="2"
+                    Content="Edit Client"
+                    Command="{Binding EditClientCommand}"
+                    Padding="12,5"
+                    Background="#2B313D"
+                    Foreground="White" />
+        </Grid>
+
+        <!-- Tab Control -->
+        <TabControl Grid.Row="2">
+            <!-- Details Tab -->
+            <TabItem Header="Details">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="ID:" FontWeight="SemiBold" Margin="0,4" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Client.Id}" Margin="0,4" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="First Name:" FontWeight="SemiBold" Margin="0,4" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Client.FirstName}" Margin="0,4" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Last Name:" FontWeight="SemiBold" Margin="0,4" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Client.LastName}" Margin="0,4" />
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Company:" FontWeight="SemiBold" Margin="0,4" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Client.Company, FallbackValue='—', TargetNullValue='—'}" Margin="0,4" />
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Email:" FontWeight="SemiBold" Margin="0,4" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Client.Email}" Margin="0,4" />
+
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Phone:" FontWeight="SemiBold" Margin="0,4" />
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Client.Phone, FallbackValue='—', TargetNullValue='—'}" Margin="0,4" />
+
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Status:" FontWeight="SemiBold" Margin="0,4" />
+                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Client.Status}" Margin="0,4" />
+
+                            <TextBlock Grid.Row="7" Grid.Column="0" Text="Created:" FontWeight="SemiBold" Margin="0,4" />
+                            <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Client.CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Margin="0,4" />
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Contact History Tab -->
+            <TabItem Header="Contact History">
+                <Grid Margin="10">
+                    <TextBlock Text="Contact history coming next..."
+                               Foreground="Gray"
+                               FontStyle="Italic"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <StatusBar Grid.Row="3" Margin="0,10,0,0">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}" />
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</UserControl>
