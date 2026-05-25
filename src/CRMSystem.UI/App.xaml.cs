@@ -78,6 +78,7 @@ public partial class App : Application
         services.AddScoped<IClientService, ClientService>();
         services.AddScoped<IContactService, ContactService>();
         services.AddScoped<IReportService, ReportService>();
+        services.AddScoped<IExportService, ExportService>();
 
         // ---------- UI layer ----------
         // Navigation & dialogs

@@ -12,4 +12,8 @@
     <ProjectReference Include="..\CRMSystem.Data\CRMSystem.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
+  </ItemGroup>
+
 </Project>
