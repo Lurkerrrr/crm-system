@@ -3,6 +3,7 @@ using CRMSystem.Domain.Entities;
 using CRMSystem.UI.ViewModels;
 using CRMSystem.UI.Views;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 
 namespace CRMSystem.UI.Services;
 
@@ -51,5 +52,24 @@ public class DialogService : IDialogService
         };
 
         return view.ShowDialog() == true;
+    }
+
+    public string? ShowSaveFileDialog(string title, string defaultFileName, string filter)
+    {
+        var dialog = new SaveFileDialog
+        {
+            Title = title,
+            FileName = defaultFileName,
+            Filter = filter,
+            AddExtension = true,
+            OverwritePrompt = true
+        };
+
+        return dialog.ShowDialog() == true ? dialog.FileName : null;
+    }
+
+    public void ShowInformation(string title, string message)
+    {
+        MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }
