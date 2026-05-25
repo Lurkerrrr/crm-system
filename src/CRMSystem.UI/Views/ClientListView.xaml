@@ -44,6 +44,19 @@
                     Margin="0,0,10,0" />
             <Button Content="Refresh"
                     Command="{Binding LoadClientsCommand}"
+                    Padding="12,5"
+                    Margin="0,0,20,0" />
+
+            <Separator Width="1"
+                       Background="#CCCCCC"
+                       Margin="0,2,15,2" />
+
+            <Button Content="Export CSV"
+                    Command="{Binding ExportCsvCommand}"
+                    Padding="12,5"
+                    Margin="0,0,10,0" />
+            <Button Content="Export JSON"
+                    Command="{Binding ExportJsonCommand}"
                     Padding="12,5" />
         </StackPanel>
 
