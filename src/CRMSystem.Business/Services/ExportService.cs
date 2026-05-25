@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
 using System.Text.Json;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CRMSystem.Domain.Entities;
@@ -11,7 +13,8 @@ public class ExportService : IExportService
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Latin1Supplement, UnicodeRanges.LatinExtendedA)
     };
 
     public async Task ExportClientsToCsvAsync(IEnumerable<Client> clients, string filePath)
@@ -35,7 +38,7 @@ public class ExportService : IExportService
             UpdatedAt = c.UpdatedAt
         });
 
-        await using var writer = new StreamWriter(filePath);
+        await using var writer = new StreamWriter(filePath, false, new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: true));
         await using var csv = new CsvWriter(writer, config);
         await csv.WriteRecordsAsync(rows);
     }
