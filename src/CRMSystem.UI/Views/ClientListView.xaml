@@ -103,7 +103,7 @@
                   CanUserSortColumns="True">
             <DataGrid.InputBindings>
                 <MouseBinding MouseAction="LeftDoubleClick"
-                              Command="{Binding EditClientCommand}" />
+                              Command="{Binding ViewDetailsCommand}" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" />
