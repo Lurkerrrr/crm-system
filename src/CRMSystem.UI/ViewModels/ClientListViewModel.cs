@@ -2,6 +2,7 @@
 using System.Windows;
 using System.ComponentModel;
 using System.Windows.Data;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CRMSystem.Business.Exceptions;
@@ -17,6 +18,7 @@ public partial class ClientListViewModel : ViewModelBase
     private readonly IClientService _clientService;
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
+    private readonly IExportService _exportService;
 
     [ObservableProperty]
     private ObservableCollection<Client> _clients = new();
@@ -49,11 +51,13 @@ public partial class ClientListViewModel : ViewModelBase
     public ClientListViewModel(
         IClientService clientService,
         IDialogService dialogService,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        IExportService exportService)
     {
         _clientService = clientService;
         _dialogService = dialogService;
         _navigationService = navigationService;
+        _exportService = exportService;
 
         // Build the filter options: "All statuses" + one per enum value
         var options = new List<StatusFilterOption>
@@ -167,6 +171,72 @@ public partial class ClientListViewModel : ViewModelBase
         SelectedStatusFilter = AvailableStatusFilters[0];
     }
 
+    [RelayCommand(CanExecute = nameof(CanExport))]
+    private async Task ExportCsvAsync()
+    {
+        await ExportAsync(
+            "Export Clients to CSV",
+            $"clients-{DateTime.Now:yyyy-MM-dd}.csv",
+            "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+            _exportService.ExportClientsToCsvAsync);
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExport))]
+    private async Task ExportJsonAsync()
+    {
+        await ExportAsync(
+            "Export Clients to JSON",
+            $"clients-{DateTime.Now:yyyy-MM-dd}.json",
+            "JSON files (*.json)|*.json|All files (*.*)|*.*",
+            _exportService.ExportClientsToJsonAsync);
+    }
+
+    private async Task ExportAsync(
+        string dialogTitle,
+        string defaultFileName,
+        string filter,
+        Func<IEnumerable<Client>, string, Task> exportAction)
+    {
+        try
+        {
+            // Use the currently filtered view, not the full list.
+            // This way "Export" respects the user's search + status filter.
+            var rows = ClientsView.Cast<Client>().ToList();
+
+            if (rows.Count == 0)
+            {
+                _dialogService.ShowInformation(
+                    "Nothing to Export",
+                    "There are no clients matching your current filters.");
+                return;
+            }
+
+            var path = _dialogService.ShowSaveFileDialog(dialogTitle, defaultFileName, filter);
+            if (path == null) return; // user cancelled
+
+            IsBusy = true;
+            StatusMessage = "Exporting...";
+
+            await exportAction(rows, path);
+
+            StatusMessage = $"Exported {rows.Count} client(s) to {Path.GetFileName(path)}.";
+            _dialogService.ShowInformation(
+                "Export Complete",
+                $"Successfully exported {rows.Count} client(s) to:\n{path}");
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Export failed: {ex.Message}";
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private bool CanExport() => !IsBusy;
+
     [RelayCommand(CanExecute = nameof(CanEditOrDelete))]
     private void ViewDetails()
     {
@@ -188,6 +258,8 @@ public partial class ClientListViewModel : ViewModelBase
     {
         LoadClientsCommand.NotifyCanExecuteChanged();
         SeedDataCommand.NotifyCanExecuteChanged();
+        ExportCsvCommand.NotifyCanExecuteChanged();
+        ExportJsonCommand.NotifyCanExecuteChanged();
     }
 
     [RelayCommand(CanExecute = nameof(CanEditOrDelete))]
