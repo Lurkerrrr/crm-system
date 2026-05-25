@@ -3,9 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CRMSystem.UI.Services;
 
-/// <summary>
-/// Default navigation service that resolves ViewModels from the DI container.
-/// </summary>
 public class NavigationService : INavigationService
 {
     private readonly IServiceProvider _serviceProvider;
@@ -31,6 +28,16 @@ public class NavigationService : INavigationService
     public void NavigateTo<TViewModel>() where TViewModel : ViewModelBase
     {
         var viewModel = _serviceProvider.GetRequiredService<TViewModel>();
+        CurrentViewModel = viewModel;
+    }
+
+    public void NavigateTo<TViewModel>(object parameter) where TViewModel : ViewModelBase
+    {
+        var viewModel = _serviceProvider.GetRequiredService<TViewModel>();
+
+        if (viewModel is INavigationAware aware)
+            aware.OnNavigatedTo(parameter);
+
         CurrentViewModel = viewModel;
     }
 }
