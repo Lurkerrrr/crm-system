@@ -28,8 +28,8 @@
                     Margin="0,0,10,0"
                     Background="#2B313D"
                     Foreground="White" />
-            <Button Content="Edit"
-                    Command="{Binding EditClientCommand}"
+            <Button Content="View Details"
+                    Command="{Binding ViewDetailsCommand}"
                     Padding="12,5"
                     Margin="0,0,10,0" />
             <Button Content="Delete"

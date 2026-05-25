@@ -16,6 +16,7 @@ public partial class ClientListViewModel : ViewModelBase
 {
     private readonly IClientService _clientService;
     private readonly IDialogService _dialogService;
+    private readonly INavigationService _navigationService;
 
     [ObservableProperty]
     private ObservableCollection<Client> _clients = new();
@@ -45,10 +46,14 @@ public partial class ClientListViewModel : ViewModelBase
         UpdateFilteredCount();
     }
 
-    public ClientListViewModel(IClientService clientService, IDialogService dialogService)
+    public ClientListViewModel(
+        IClientService clientService,
+        IDialogService dialogService,
+        INavigationService navigationService)
     {
         _clientService = clientService;
         _dialogService = dialogService;
+        _navigationService = navigationService;
 
         // Build the filter options: "All statuses" + one per enum value
         var options = new List<StatusFilterOption>
@@ -59,7 +64,7 @@ public partial class ClientListViewModel : ViewModelBase
             .Select(s => new StatusFilterOption(s.ToString(), s)));
         AvailableStatusFilters = options;
 
-        _selectedStatusFilter = AvailableStatusFilters[0]; // default to "All statuses"
+        _selectedStatusFilter = AvailableStatusFilters[0];
 
         ClientsView = CollectionViewSource.GetDefaultView(Clients);
         ClientsView.Filter = FilterClient;
@@ -163,23 +168,17 @@ public partial class ClientListViewModel : ViewModelBase
     }
 
     [RelayCommand(CanExecute = nameof(CanEditOrDelete))]
-    private async Task EditClientAsync()
+    private void ViewDetails()
     {
         if (SelectedClient == null) return;
-
-        var saved = _dialogService.ShowClientForm(SelectedClient);
-        if (saved)
-        {
-            StatusMessage = "Client updated.";
-            await LoadClientsAsync();
-        }
+        _navigationService.NavigateTo<ClientDetailsViewModel>(SelectedClient.Id);
     }
 
     private bool CanEditOrDelete() => SelectedClient != null;
 
     partial void OnSelectedClientChanged(Client? value)
     {
-        EditClientCommand.NotifyCanExecuteChanged();
+        ViewDetailsCommand.NotifyCanExecuteChanged();
         DeleteClientCommand.NotifyCanExecuteChanged();
     }
 
