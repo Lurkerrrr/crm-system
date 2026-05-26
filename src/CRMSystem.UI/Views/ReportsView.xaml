@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:CRMSystem.UI.ViewModels"
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:controls="clr-namespace:CRMSystem.UI.Views.Controls"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:ReportsViewModel}">
 
@@ -41,107 +42,122 @@
         </Style>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <!-- Header -->
-            <Grid Grid.Row="0" Margin="0,0,0,20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+                <!-- Header -->
+                <Grid Grid.Row="0" Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0"
-                           Text="Reports"
-                           Style="{StaticResource PageTitle}"
-                           Margin="0"
-                           VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="0"
+                               Text="Reports"
+                               Style="{StaticResource PageTitle}"
+                               Margin="0"
+                               VerticalAlignment="Center" />
 
-                <Button Grid.Column="1"
-                        Content="Refresh"
-                        Command="{Binding RefreshCommand}"
-                        Style="{StaticResource SecondaryButton}"
-                        Margin="0" />
+                    <Button Grid.Column="1"
+                            Content="Refresh"
+                            Command="{Binding RefreshCommand}"
+                            Style="{StaticResource SecondaryButton}"
+                            Margin="0" />
+                </Grid>
+
+                <!-- Empty state -->
+                <Border Grid.Row="1"
+                        Background="#FFF8E1"
+                        BorderBrush="#FFD54F"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="20"
+                        Margin="0,0,0,20">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasNoData}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <TextBlock Text="No data yet. Add some clients and contacts to see reports."
+                               FontStyle="Italic" />
+                </Border>
+
+                <!-- Stat cards -->
+                <UniformGrid Grid.Row="2" Rows="1" Columns="4" Margin="0,0,0,20">
+                    <Border Style="{StaticResource StatCard}" Margin="0,0,5,0">
+                        <StackPanel>
+                            <TextBlock Text="Total Clients" Style="{StaticResource StatLabel}" />
+                            <TextBlock Text="{Binding TotalClients}" Style="{StaticResource StatValue}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource StatCard}" Margin="5,0,5,0">
+                        <StackPanel>
+                            <TextBlock Text="Total Contacts" Style="{StaticResource StatLabel}" />
+                            <TextBlock Text="{Binding TotalContacts}" Style="{StaticResource StatValue}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource StatCard}" Margin="5,0,5,0">
+                        <StackPanel>
+                            <TextBlock Text="Contacts (7 Days)" Style="{StaticResource StatLabel}" />
+                            <TextBlock Text="{Binding ContactsLast7Days}" Style="{StaticResource StatValue}" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource StatCard}" Margin="5,0,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Contacts (30 Days)" Style="{StaticResource StatLabel}" />
+                            <TextBlock Text="{Binding ContactsLast30Days}" Style="{StaticResource StatValue}" />
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+
+                <!-- Pie chart: clients by status -->
+                <Border Grid.Row="3" Style="{StaticResource ChartContainer}" Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Clients by Status" Style="{StaticResource ChartHeader}" />
+                        <lvc:PieChart Series="{Binding ClientStatusSeries}"
+                                      Height="320"
+                                      LegendPosition="Right" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Bar chart: contacts by type -->
+                <Border Grid.Row="4" Style="{StaticResource ChartContainer}">
+                    <StackPanel>
+                        <TextBlock Text="Contacts by Type" Style="{StaticResource ChartHeader}" />
+                        <lvc:CartesianChart Series="{Binding ContactTypeSeries}"
+                                            XAxes="{Binding ContactTypeXAxes}"
+                                            YAxes="{Binding ContactTypeYAxes}"
+                                            Height="320"
+                                            LegendPosition="Hidden" />
+                    </StackPanel>
+                </Border>
             </Grid>
+        </ScrollViewer>
 
-            <!-- Empty state -->
-            <Border Grid.Row="1"
-                    Background="#FFF8E1"
-                    BorderBrush="#FFD54F"
-                    BorderThickness="1"
-                    CornerRadius="8"
-                    Padding="20"
-                    Margin="0,0,0,20">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Visibility" Value="Collapsed" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasNoData}" Value="True">
-                                <Setter Property="Visibility" Value="Visible" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
-                <TextBlock Text="No data yet. Add some clients and contacts to see reports."
-                           FontStyle="Italic" />
-            </Border>
-
-            <!-- Stat cards -->
-            <UniformGrid Grid.Row="2" Rows="1" Columns="4" Margin="0,0,0,20">
-                <Border Style="{StaticResource StatCard}" Margin="0,0,5,0">
-                    <StackPanel>
-                        <TextBlock Text="Total Clients" Style="{StaticResource StatLabel}" />
-                        <TextBlock Text="{Binding TotalClients}" Style="{StaticResource StatValue}" />
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource StatCard}" Margin="5,0,5,0">
-                    <StackPanel>
-                        <TextBlock Text="Total Contacts" Style="{StaticResource StatLabel}" />
-                        <TextBlock Text="{Binding TotalContacts}" Style="{StaticResource StatValue}" />
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource StatCard}" Margin="5,0,5,0">
-                    <StackPanel>
-                        <TextBlock Text="Contacts (7 Days)" Style="{StaticResource StatLabel}" />
-                        <TextBlock Text="{Binding ContactsLast7Days}" Style="{StaticResource StatValue}" />
-                    </StackPanel>
-                </Border>
-                <Border Style="{StaticResource StatCard}" Margin="5,0,0,0">
-                    <StackPanel>
-                        <TextBlock Text="Contacts (30 Days)" Style="{StaticResource StatLabel}" />
-                        <TextBlock Text="{Binding ContactsLast30Days}" Style="{StaticResource StatValue}" />
-                    </StackPanel>
-                </Border>
-            </UniformGrid>
-
-            <!-- Pie chart: clients by status -->
-            <Border Grid.Row="3" Style="{StaticResource ChartContainer}" Margin="0,0,0,20">
-                <StackPanel>
-                    <TextBlock Text="Clients by Status" Style="{StaticResource ChartHeader}" />
-                    <lvc:PieChart Series="{Binding ClientStatusSeries}"
-                                  Height="320"
-                                  LegendPosition="Right" />
-                </StackPanel>
-            </Border>
-
-            <!-- Bar chart: contacts by type -->
-            <Border Grid.Row="4" Style="{StaticResource ChartContainer}">
-                <StackPanel>
-                    <TextBlock Text="Contacts by Type" Style="{StaticResource ChartHeader}" />
-                    <lvc:CartesianChart Series="{Binding ContactTypeSeries}"
-                                        XAxes="{Binding ContactTypeXAxes}"
-                                        YAxes="{Binding ContactTypeYAxes}"
-                                        Height="320"
-                                        LegendPosition="Hidden" />
-                </StackPanel>
-            </Border>
-        </Grid>
-    </ScrollViewer>
+        <controls:BusyOverlay Message="Loading reports...">
+            <controls:BusyOverlay.Style>
+                <Style TargetType="controls:BusyOverlay">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls:BusyOverlay.Style>
+        </controls:BusyOverlay>
+    </Grid>
 </UserControl>
