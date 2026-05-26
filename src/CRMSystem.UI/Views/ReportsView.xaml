@@ -60,14 +60,15 @@
 
                 <TextBlock Grid.Column="0"
                            Text="Reports"
-                           FontSize="24"
-                           FontWeight="Bold"
+                           Style="{StaticResource PageTitle}"
+                           Margin="0"
                            VerticalAlignment="Center" />
 
                 <Button Grid.Column="1"
                         Content="Refresh"
                         Command="{Binding RefreshCommand}"
-                        Padding="12,5" />
+                        Style="{StaticResource SecondaryButton}"
+                        Margin="0" />
             </Grid>
 
             <!-- Empty state -->

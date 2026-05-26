@@ -25,21 +25,20 @@
             <Button Grid.Column="0"
                     Content="← Back"
                     Command="{Binding GoBackCommand}"
-                    Padding="12,5"
+                    Style="{StaticResource SecondaryButton}"
                     Margin="0,0,15,0" />
 
             <TextBlock Grid.Column="1"
                        Text="{Binding Client.FullName, FallbackValue='Client Details'}"
-                       FontSize="24"
-                       FontWeight="Bold"
+                       Style="{StaticResource PageTitle}"
+                       Margin="0"
                        VerticalAlignment="Center" />
 
             <Button Grid.Column="2"
                     Content="Edit Client"
                     Command="{Binding EditClientCommand}"
-                    Padding="12,5"
-                    Background="#2B313D"
-                    Foreground="White" />
+                    Style="{StaticResource PrimaryButton}"
+                    Margin="0" />
         </Grid>
 
         <!-- Tab Control -->
@@ -103,30 +102,21 @@
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
                         <Button Content="Add Contact"
                                 Command="{Binding AddContactCommand}"
-                                Padding="12,5"
-                                Margin="0,0,10,0"
-                                Background="#2B313D"
-                                Foreground="White" />
+                                Style="{StaticResource PrimaryButton}" />
                         <Button Content="Edit"
                                 Command="{Binding EditContactCommand}"
-                                Padding="12,5"
-                                Margin="0,0,10,0" />
+                                Style="{StaticResource SecondaryButton}" />
                         <Button Content="Delete"
                                 Command="{Binding DeleteContactCommand}"
-                                Padding="12,5"
-                                Background="#C62828"
-                                Foreground="White" />
+                                Style="{StaticResource DangerButton}"
+                                Margin="0" />
                     </StackPanel>
 
                     <TextBlock Grid.Row="1"
-                               Text="No contacts yet. Click 'Add Contact' to record the first interaction."
-                               Foreground="Gray"
-                               FontStyle="Italic"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Panel.ZIndex="10">
+           Text="No contacts yet. Click 'Add Contact' to record the first interaction."
+           Panel.ZIndex="10">
                         <TextBlock.Style>
-                            <Style TargetType="TextBlock">
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource EmptyStateText}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Contacts.Count}" Value="0">

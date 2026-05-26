@@ -17,34 +17,24 @@
 
         <TextBlock Grid.Row="0"
                    Text="Clients"
-                   FontSize="24"
-                   FontWeight="Bold"
-                   Margin="0,0,0,15" />
+                   Style="{StaticResource PageTitle}" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
             <Button Content="Add Client"
                     Command="{Binding AddClientCommand}"
-                    Padding="12,5"
-                    Margin="0,0,10,0"
-                    Background="#2B313D"
-                    Foreground="White" />
+                    Style="{StaticResource PrimaryButton}" />
             <Button Content="View Details"
                     Command="{Binding ViewDetailsCommand}"
-                    Padding="12,5"
-                    Margin="0,0,10,0" />
+                    Style="{StaticResource SecondaryButton}" />
             <Button Content="Delete"
                     Command="{Binding DeleteClientCommand}"
-                    Padding="12,5"
-                    Margin="0,0,10,0"
-                    Background="#C62828"
-                    Foreground="White" />
+                    Style="{StaticResource DangerButton}" />
             <Button Content="Seed Sample Data"
                     Command="{Binding SeedDataCommand}"
-                    Padding="12,5"
-                    Margin="0,0,10,0" />
+                    Style="{StaticResource SecondaryButton}" />
             <Button Content="Refresh"
                     Command="{Binding LoadClientsCommand}"
-                    Padding="12,5"
+                    Style="{StaticResource SecondaryButton}"
                     Margin="0,0,20,0" />
 
             <Separator Width="1"
@@ -53,11 +43,11 @@
 
             <Button Content="Export CSV"
                     Command="{Binding ExportCsvCommand}"
-                    Padding="12,5"
-                    Margin="0,0,10,0" />
+                    Style="{StaticResource SecondaryButton}" />
             <Button Content="Export JSON"
                     Command="{Binding ExportJsonCommand}"
-                    Padding="12,5" />
+                    Style="{StaticResource SecondaryButton}"
+                    Margin="0" />
         </StackPanel>
 
         <Grid Grid.Row="2" Margin="0,0,0,10">
