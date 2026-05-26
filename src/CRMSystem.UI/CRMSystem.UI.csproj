@@ -11,7 +11,12 @@
 		<FileVersion>1.0.0.0</FileVersion>
 		<Version>1.0.0</Version>
 		<Product>CRM System</Product>
+		<ApplicationIcon>Resources\app-icon.ico</ApplicationIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\app-icon.ico" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
@@ -25,6 +30,12 @@
 		<ProjectReference Include="..\CRMSystem.Domain\CRMSystem.Domain.csproj" />
 		<ProjectReference Include="..\CRMSystem.Data\CRMSystem.Data.csproj" />
 		<ProjectReference Include="..\CRMSystem.Business\CRMSystem.Business.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\app-icon.ico">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
 	</ItemGroup>
 
 	<ItemGroup>

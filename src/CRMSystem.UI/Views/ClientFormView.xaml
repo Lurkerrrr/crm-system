@@ -10,6 +10,7 @@
         Width="450"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
+        Icon="/Resources/app-icon.ico"
         d:DataContext="{d:DesignInstance Type=vm:ClientFormViewModel}">
 
     <Window.Resources>
