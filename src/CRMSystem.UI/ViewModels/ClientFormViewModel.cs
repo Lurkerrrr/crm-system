@@ -32,12 +32,16 @@ public partial class ClientFormViewModel : ObservableValidator
     [NotifyDataErrorInfo]
     [Required(ErrorMessage = "First name is required.")]
     [MaxLength(100, ErrorMessage = "First name cannot exceed 100 characters.")]
+    [RegularExpression(@"^[\p{L}][\p{L} \-']*$",
+            ErrorMessage = "First name can only contain letters, spaces, hyphens, and apostrophes.")]
     private string _firstName = string.Empty;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required(ErrorMessage = "Last name is required.")]
     [MaxLength(100, ErrorMessage = "Last name cannot exceed 100 characters.")]
+    [RegularExpression(@"^[\p{L}][\p{L} \-']*$",
+            ErrorMessage = "Last name can only contain letters, spaces, hyphens, and apostrophes.")]
     private string _lastName = string.Empty;
 
     [ObservableProperty]
@@ -49,12 +53,16 @@ public partial class ClientFormViewModel : ObservableValidator
     [NotifyDataErrorInfo]
     [Required(ErrorMessage = "Email is required.")]
     [EmailAddress(ErrorMessage = "Email format is invalid.")]
+    [RegularExpression(@"^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$",
+            ErrorMessage = "Email must be in the format name@domain.tld (TLD min 2 letters).")]
     [MaxLength(255, ErrorMessage = "Email cannot exceed 255 characters.")]
     private string _email = string.Empty;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [MaxLength(50, ErrorMessage = "Phone cannot exceed 50 characters.")]
+    [RegularExpression(@"^$|^[+]?[\d\s\-()]{7,}$",
+            ErrorMessage = "Phone must contain at least 7 digits and can include +, -, (, ), spaces.")]
     private string? _phone;
 
     [ObservableProperty]
