@@ -63,12 +63,16 @@
                       Padding="6,4" />
 
             <TextBlock Text="Description *" Style="{StaticResource FieldLabel}" />
-            <TextBox Style="{StaticResource ValidatedTextBox}"
+            <TextBox x:Name="DescriptionBox"
+                     Style="{StaticResource ValidatedTextBox}"
                      Text="{Binding Description, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
                      Height="120"
                      TextWrapping="Wrap"
                      AcceptsReturn="True"
                      VerticalScrollBarVisibility="Auto" />
+            <TextBlock Style="{StaticResource ErrorText}"
+                       Text="{Binding ElementName=DescriptionBox, Path=(Validation.Errors)[0].ErrorContent}"
+                       Visibility="{Binding ElementName=DescriptionBox, Path=(Validation.HasError), Converter={StaticResource BoolToVisibilityConverter}}" />
         </StackPanel>
 
         <TextBlock Grid.Row="2"

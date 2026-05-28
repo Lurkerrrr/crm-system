@@ -34,6 +34,7 @@ public partial class ContactFormViewModel : ObservableValidator
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [Required(ErrorMessage = "Description is required.")]
+    [MinLength(3, ErrorMessage = "Description must be at least 3 characters.")]
     [MaxLength(2000, ErrorMessage = "Description cannot exceed 2000 characters.")]
     private string _description = string.Empty;
 
