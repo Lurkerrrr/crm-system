@@ -2,6 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
     <!-- ============ COLORS ============ -->
     <Color x:Key="PrimaryColor">#2B313D</Color>
     <Color x:Key="PrimaryHoverColor">#3A4252</Color>
